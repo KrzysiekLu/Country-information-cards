@@ -70,3 +70,6 @@ input.addEventListener('keypress', e => {
     getCountryDataM(input.value);
   }
 });
+btn.addEventListener('click', () => {
+  getCountryDataM(input.value);
+});
