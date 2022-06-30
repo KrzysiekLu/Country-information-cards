@@ -71,5 +71,30 @@ input.addEventListener('keypress', e => {
   }
 });
 btn.addEventListener('click', () => {
-  getCountryDataM(input.value);
+  wheraAmI();
 });
+
+const getGeolocation = () => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, () => {
+      reject(new Error('No access to location'));
+    });
+  });
+};
+
+const wheraAmI = async () => {
+  try {
+    countriesContainer.textContent = '';
+    const positiion = await getGeolocation();
+    const { latitude: lat, longitude: lon } = positiion.coords;
+    const responseGeo = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLnguage=en`
+    );
+    const dataGeo = await responseGeo.json();
+    console.log(dataGeo);
+
+    getCountryDataM(dataGeo.countryName);
+  } catch (error) {
+    console.log(error);
+  }
+};
